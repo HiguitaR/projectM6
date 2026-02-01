@@ -2,9 +2,10 @@ package com.higuitar.catalogoproductosflex.model.document;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Document(collection = "products")
 public class Product {
@@ -15,14 +16,15 @@ public class Product {
     private String name;
     private Double price;
     private String description;
+    @Field("especificaciones")
     private Map<String, Object> specs;
-    private List<String> tags;
+    private Set<String> tags;
 
     // Constructors
     public Product() {}
 
     public Product(String id, String name, Double price, String description,
-                   Map<String, Object> specs, List<String> tags) {
+                   Map<String, Object> specs, Set<String> tags) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -72,11 +74,11 @@ public class Product {
         this.specs = specs;
     }
 
-    public List<String> getTags() {
+    public Set<String> getTags() {
         return tags;
     }
 
-    public void setTags(List<String> tags) {
+    public void setTags(Set<String> tags) {
         this.tags = tags;
     }
 }

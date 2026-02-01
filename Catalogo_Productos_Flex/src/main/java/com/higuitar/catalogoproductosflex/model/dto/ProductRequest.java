@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class ProductRequest {
 
@@ -24,7 +25,7 @@ public class ProductRequest {
     private Map<@NotBlank(message = "This field is required")String, Object> specs;
     @NotEmpty(message = "This field is required")
     @Valid
-    private List<@NotBlank(message = "This field is required")String> tags;
+    private Set<@NotBlank(message = "This field is required")String> tags;
 
     // Setters and Getters
     public  String getName() {
@@ -59,11 +60,11 @@ public class ProductRequest {
         this.specs = specs;
     }
 
-    public List<String> getTags() {
+    public Set<String> getTags() {
         return tags;
     }
 
-    public void setTags(List<String> tags) {
+    public void setTags(Set<String> tags) {
         this.tags = tags;
     }
 }
