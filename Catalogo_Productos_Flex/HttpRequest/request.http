@@ -1,0 +1,214 @@
+###
+GET http://localhost:8080/api/product
+
+### Crear producto
+POST http://localhost:8080/api/product
+Content-Type: application/json
+
+{
+  "name": "Laptop Flex 15",
+  "price": 1299.99,
+  "description": "New Laptop Flex 15 ",
+  "specs": {
+    "ram": "16GB",
+    "cpu": "Intel Core i7",
+    "storage": "512GB SSD",
+    "screenSizeInches": 15.6,
+    "hasBluetooth": true
+  },
+  "tags": ["electronica", "laptop", "oficina"]
+}
+
+###
+
+DELETE http://localhost:8080/api/product/697ff5a3fa86ce418505864a
+
+### Base URL (ajusta el puerto si tu app corre en otro)
+@baseUrl = http://localhost:8080
+@api = {{baseUrl}}/api/product
+
+############################################################
+# 1) Crear al menos 5 productos
+############################################################
+
+### Create Product 1
+# @name createProduct1
+POST {{api}}
+Content-Type: application/json
+
+{
+  "name": "Electric Guitar Strat Style",
+  "price": 699.99,
+  "description": "Electric guitar, strat-style, great for rock and blues.",
+  "specs": {
+    "brand": "Fender",
+    "model": "Stratocaster",
+    "color": "sunburst",
+    "strings": 6
+  },
+  "tags": ["guitar", "electric", "strat", "fender"]
+}
+
+> {%
+  client.global.set("p1Id", response.body.id);
+%}
+
+### Create Product 2
+# @name createProduct2
+POST {{api}}
+Content-Type: application/json
+
+{
+  "name": "Acoustic Guitar Dreadnought",
+  "price": 299.50,
+  "description": "Warm acoustic guitar, dreadnought body.",
+  "specs": {
+    "brand": "Yamaha",
+    "model": "F310",
+    "topWood": "spruce",
+    "strings": 6
+  },
+  "tags": ["guitar", "acoustic", "yamaha"]
+}
+
+> {%
+  client.global.set("p2Id", response.body.id);
+%}
+
+### Create Product 3
+# @name createProduct3
+POST {{api}}
+Content-Type: application/json
+
+{
+  "name": "Digital Piano 88 Keys",
+  "price": 549.00,
+  "description": "88-key digital piano with weighted keys.",
+  "specs": {
+    "brand": "Roland",
+    "keys": 88,
+    "weighted": true,
+    "polyphony": 128
+  },
+  "tags": ["piano", "digital", "keys", "roland"]
+}
+
+> {%
+  client.global.set("p3Id", response.body.id);
+%}
+
+### Create Product 4
+# @name createProduct4
+POST {{api}}
+Content-Type: application/json
+
+{
+  "name": "Bass Guitar 4-String",
+  "price": 399.99,
+  "description": "4-string bass guitar for funk and jazz.",
+  "specs": {
+    "brand": "Squier",
+    "strings": 4,
+    "scale": "34"
+  },
+  "tags": ["guitar", "bass", "electric", "squier"]
+}
+
+> {%
+  client.global.set("p4Id", response.body.id);
+%}
+
+### Create Product 5
+# @name createProduct5
+POST {{api}}
+Content-Type: application/json
+
+{
+  "name": "Guitar Strings Pack 10-46",
+  "price": 8.99,
+  "description": "Nickel wound guitar strings, light gauge 10-46.",
+  "specs": {
+    "brand": "DAddario",
+    "gauge": "10-46",
+    "type": "nickel"
+  },
+  "tags": ["accessory", "strings", "guitar"]
+}
+
+> {%
+  client.global.set("p5Id", response.body.id);
+%}
+
+############################################################
+# 2) Listar todos
+############################################################
+
+### Get All Products
+GET {{api}}
+
+############################################################
+# 3) Búsquedas (search, tags, spec)
+############################################################
+
+### Search by name/description (q)
+GET {{api}}/search?q=guitar
+
+### Search by name/description (q)
+GET {{api}}/search?q=weighted
+
+### Find by tags (OR): tags=guitar OR tags=acoustic
+GET {{api}}/tags?tags=guitar&tags=acoustic
+
+### Find by tags (OR): tags=piano OR tags=digital
+GET {{api}}/tags?tags=piano&tags=digital
+
+### Find by tags (OR): tags=strings
+GET {{api}}/tags?tags=strings
+
+### Find by spec (key/value)
+GET {{api}}/spec?key=brand&value=Fender
+
+### Find by spec (key/value)
+GET {{api}}/spec?key=strings&value=6
+
+### Find by spec (key/value)
+GET {{api}}/spec?key=keys&value=88
+
+############################################################
+# 4) Un PUT (actualizar un producto)
+############################################################
+
+### Update Product 2 (usa el id capturado en p2Id)
+PUT {{api}}/{{p2Id}}
+Content-Type: application/json
+
+{
+  "name": "Acoustic Guitar Dreadnought (Updated)",
+  "price": 279.00,
+  "description": "Updated: warm acoustic guitar, dreadnought body, great for beginners.",
+  "specs": {
+    "brand": "Yamaha",
+    "model": "F310",
+    "topWood": "spruce",
+    "strings": 6,
+    "finish": "natural"
+  },
+  "tags": ["guitar", "acoustic", "yamaha", "updated"]
+}
+
+############################################################
+# 5) Un DELETE (borrar cualquier producto)
+############################################################
+
+### Delete Product 5 (usa el id capturado en p5Id)
+DELETE {{api}}/{{p5Id}}
+
+############################################################
+# 6) Verificación final
+############################################################
+
+### Get All Products (after delete)
+GET {{api}}
+
+### Find by tags (strings) - debería seguir encontrando otros si aplican
+GET {{api}}/tags?tags=strings

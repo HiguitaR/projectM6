@@ -26,7 +26,7 @@ public class IProductService implements ProductService{
     @Override
     public ProductResponse productSave(ProductRequest product) {
 
-        if(productRepository.existByProductName(product.getName())){
+        if(productRepository.existsByName(product.getName())){
             throw new ProductAlreadyExistException();
         }
         var document = productMapper.toRequest(product);
@@ -50,7 +50,7 @@ public class IProductService implements ProductService{
 
     @Override
     public void delete(String id) {
-        if(productRepository.existsById(id)){
+        if(!productRepository.existsById(id)){
             throw new ProductNotFoundException();
         }
         productRepository.deleteById(id);
