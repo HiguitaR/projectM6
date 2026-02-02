@@ -1,27 +1,3 @@
-###
-GET http://localhost:8080/api/product
-
-### Crear producto
-POST http://localhost:8080/api/product
-Content-Type: application/json
-
-{
-  "name": "Laptop Flex 15",
-  "price": 1299.99,
-  "description": "New Laptop Flex 15 ",
-  "specs": {
-    "ram": "16GB",
-    "cpu": "Intel Core i7",
-    "storage": "512GB SSD",
-    "screenSizeInches": 15.6,
-    "hasBluetooth": true
-  },
-  "tags": ["electronica", "laptop", "oficina"]
-}
-
-###
-
-DELETE http://localhost:8080/api/product/697ff5a3fa86ce418505864a
 
 ### Base URL (ajusta el puerto si tu app corre en otro)
 @baseUrl = http://localhost:8080
