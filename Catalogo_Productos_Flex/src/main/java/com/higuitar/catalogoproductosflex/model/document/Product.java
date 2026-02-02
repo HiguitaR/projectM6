@@ -7,6 +7,12 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Represents a product entity within the system.
+ * This class is mapped to the "products" collection in the database.
+ * It contains attributes that define a product, such as its ID, name, price, description,
+ * specifications, and associated tags.
+ */
 @Document(collection = "products")
 public class Product {
 

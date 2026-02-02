@@ -12,6 +12,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Service implementation for managing products.
+ * Provides operations for creating, retrieving, updating, deleting, and searching products.
+ */
 @Service
 public class IProductService implements ProductService{
 
