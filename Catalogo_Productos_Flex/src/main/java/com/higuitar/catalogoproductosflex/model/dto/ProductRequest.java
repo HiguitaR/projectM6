@@ -1,68 +1,52 @@
 package com.higuitar.catalogoproductosflex.model.dto;
 
-import io.swagger.v3.oas.annotations.media.Schema;
+
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
-import java.util.List;
+
 import java.util.Map;
 import java.util.Set;
 
-
 /**
  * Represents a request payload for creating or updating a product.
- * This class contains the attributes and the corresponding validation constraints
- * necessary to define a product in the system.
+ * This class contains the basic attributes required to define a
+ * product, including its name, price, description, specifications,
+ * and associated tags.
+ * <p>
+ * Validation details:
+ * - The `name` attribute must not be blank.
+ * - The `price` attribute is required and must be a minimum value of 1.0.
+ * - The `description` attribute must not be blank.
+ * - The `specs` map must be non-empty, with non-blank keys.
+ * - The `tags` set must be non-empty, with non-blank values.
  */
-@Schema(
-        name = "ProductRequest",
-        description = "Payload used to create or update a product."
-)
+
 public class ProductRequest {
 
     // Attributes and Validations
-    @Schema(
-            description = "Product name.",
-            example = "Fender Stratocaster",
-            requiredMode = Schema.RequiredMode.REQUIRED
-    )
+
     @NotBlank(message = "The name is required")
     private String name;
 
-    @Schema(
-            description = "Product price. Must be greater than or equal to 1.0.",
-            example = "1299.99",
-            requiredMode = Schema.RequiredMode.REQUIRED
-    )
+
     @NotNull(message = "The price is required")
     @DecimalMin(value = "1.0", message = "The price must no be less than 1.0")
     private Double price;
 
-    @Schema(
-            description = "Product description.",
-            example = "Electric guitar with alder body and maple neck.",
-            requiredMode = Schema.RequiredMode.REQUIRED
-    )
+
     @NotBlank(message = "The description is required")
     private String description;
 
-    @Schema(
-            description = "Flexible key/value specifications for the product (e.g., color, brand, model, condition).",
-            example = "{\"color\":\"black\",\"brand\":\"Fender\",\"strings\":6,\"condition\":\"new\"}",
-            requiredMode = Schema.RequiredMode.REQUIRED
-    )
+
     @NotEmpty(message = "This field is required")
     @Valid
     private Map<@NotBlank(message = "This field is required")String, Object> specs;
 
-    @Schema(
-            description = "Tags used for filtering and categorization.",
-            example = "[\"electric\",\"guitar\",\"rock\"]",
-            requiredMode = Schema.RequiredMode.REQUIRED
-    )
+
     @NotEmpty(message = "This field is required")
     @Valid
     private Set<@NotBlank(message = "This field is required")String> tags;

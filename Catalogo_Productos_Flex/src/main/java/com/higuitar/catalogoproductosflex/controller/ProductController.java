@@ -3,13 +3,7 @@ package com.higuitar.catalogoproductosflex.controller;
 import com.higuitar.catalogoproductosflex.model.dto.ProductRequest;
 import com.higuitar.catalogoproductosflex.model.dto.ProductResponse;
 import com.higuitar.catalogoproductosflex.service.ProductService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.tags.Tag;
+
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -24,23 +18,14 @@ import java.util.stream.Collectors;
 
 
 /**
- * Controller for managing products in the system. Provides API endpoints for
- * listing, creating, updating, deleting, and searching products, as well as
- * filtering by tags or specifications.
- *
- * Annotations:
- * - @Validated: Enables validation on input data.
- * - @RestController: Marks the class as a REST controller.
- * - @RequestMapping("/api/product"): Maps requests to paths starting with "/api/product".
- * - @Tag: Provides OpenAPI metadata for the "Products" resource.
+ * REST controller for managing product-related operations.
+ * Handles operations such as retrieving, creating, updating, deleting,
+ * and searching for products based on various criteria.
  */
 @Validated
 @RestController
 @RequestMapping("/api/product")
-@Tag(
-        name = "Products",
-        description = "Product management API: CRUD operations and search endpoints " +
-                "(text, tags, and specifications).")
+
 public class ProductController {
 
     private final ProductService productService;
@@ -60,18 +45,7 @@ public class ProductController {
      *
      * @return a list of {@code ProductResponse} objects representing the registered products.
      */
-    @Operation(
-            summary = "List products",
-            description = "Returns all registered products."
-    )
-    @ApiResponses({
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "List of products",
-                    content = @Content(array = @ArraySchema(schema =
-                    @Schema(implementation = ProductResponse.class)))
-            )
-    })
+
     @GetMapping
     public List<ProductResponse> getAllProducts(){
         return productService.getAll();
@@ -84,20 +58,7 @@ public class ProductController {
      * @param request the product request object containing the details of the product to be created
      * @return a ResponseEntity containing the created product resource and HTTP status code 201 (Created)
      */
-    @Operation(
-            summary = "Create product",
-            description = "Creates a new product and returns the created resource."
-    )
-    @ApiResponses({
-            @ApiResponse(
-                    responseCode = "201",
-                    description = "Product created",
-                    content = @Content(schema = @Schema(implementation =
-                            ProductResponse.class))
-            ),
-            @ApiResponse(responseCode = "400", description =
-                    "Validation failed", content = @Content)
-    })
+
     @PostMapping
     public ResponseEntity<ProductResponse> createProduct
             (@Valid @RequestBody ProductRequest request) {
@@ -113,22 +74,7 @@ public class ProductController {
      * @param request the product update request containing the updated fields
      * @return a ResponseEntity containing the updated product details on success
      */
-    @Operation(
-            summary = "Update product",
-            description = "Updates an existing product by its ID."
-    )
-    @ApiResponses({
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Product updated",
-                    content = @Content(schema = @Schema(implementation =
-                            ProductResponse.class))
-            ),
-            @ApiResponse(responseCode = "400", description =
-                    "Validation failed", content = @Content),
-            @ApiResponse(responseCode = "404", description =
-                    "Product not found", content = @Content)
-    })
+
     @PutMapping("/{id}")
     public ResponseEntity<ProductResponse> updateProduct(
             @PathVariable String id,
@@ -146,14 +92,7 @@ public class ProductController {
      * @return A ResponseEntity with no content if the deletion is successful (HTTP 204),
      *         or an appropriate error response (e.g., HTTP 404 if the product is not found).
      */
-    @Operation(
-            summary = "Delete product",
-            description = "Deletes a product by its ID. Returns 204 when deleted successfully."
-    )
-    @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "Product deleted"),
-            @ApiResponse(responseCode = "404", description = "Product not found", content = @Content)
-    })
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable String id) {
         productService.delete(id);
@@ -171,21 +110,7 @@ public class ProductController {
      * @return A ResponseEntity containing a list of ProductResponse objects representing the search results.
      *         If no products match the criteria, an empty list is returned.
      */
-    @Operation(
-            summary = "Search by name or description",
-            description = "Searches for products that contain the provided " +
-                    "text in the name or description."
-    )
-    @ApiResponses({
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Search results",
-                    content = @Content(array = @ArraySchema(schema = @Schema
-                            (implementation = ProductResponse.class)))
-            ),
-            @ApiResponse(responseCode = "400", description =
-                    "Invalid query parameter 'q'", content = @Content)
-    })
+
     @GetMapping("/search")
     public ResponseEntity<List<ProductResponse>> searchByNameOrDescription(
             @RequestParam("q") @NotBlank(message = "q must not be blank") String text
@@ -202,20 +127,7 @@ public class ProductController {
      * @return a ResponseEntity containing a list of products wrapped in
      *         ProductResponse objects that match the provided tags.
      */
-    @Operation(
-            summary = "Filter by tags",
-            description = "Returns products matching the provided tags."
-    )
-    @ApiResponses({
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Results filtered by tags",
-                    content = @Content(array = @ArraySchema(schema =
-                    @Schema(implementation = ProductResponse.class)))
-            ),
-            @ApiResponse(responseCode = "400", description =
-                    "Invalid 'tags' parameter", content = @Content)
-    })
+
     @GetMapping("/tags")
     public ResponseEntity<List<ProductResponse>> findByTags(
             @RequestParam("tags")
@@ -238,21 +150,7 @@ public class ProductController {
      * @param value the specification value used for filtering products; must not be blank
      * @return a ResponseEntity containing a list of products that match the given specification key/value pair
      */
-    @Operation(
-            summary = "Filter by specification",
-            description = "Filters products by a specification key/value " +
-                    "pair (e.g., key=color, value=black)."
-    )
-    @ApiResponses({
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Results filtered by specification",
-                    content = @Content(array = @ArraySchema(schema =
-                    @Schema(implementation = ProductResponse.class)))
-            ),
-            @ApiResponse(responseCode = "400", description =
-                    "Invalid 'key'/'value' parameters", content = @Content)
-    })
+
     @GetMapping("/spec")
     public ResponseEntity<List<ProductResponse>> findBySpec(
             @RequestParam("key") @NotBlank(message = "key must not be blank") String key,
